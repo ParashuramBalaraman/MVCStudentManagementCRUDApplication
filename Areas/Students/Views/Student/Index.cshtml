@@ -1,0 +1,127 @@
+﻿@model MVCStudentManagementCRUD.Models.Student
+@{
+    ViewBag.Title = "Student List";
+}
+@Html.Partial("_StudentTable")
+@section scripts{
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $("#StudentTable").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("GetStudents", "Student")",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "FirstName" },
+                    { "data": "LastName" },
+                    { "data": "MiddleName" },
+                    { "data": "PreferredName" },
+                    {
+                        "data": "DateOfBirth",
+                        "render": function (data) {
+                            var date = new Date(parseInt(data.substr(6)));
+                            return date.toLocaleDateString();
+                        }
+                    },
+                    { "data": "Degree" },
+                    { "data": "Email" },
+                    { "data": "Phone" },
+                    { "data": "Address" },
+                    {
+                        "data": "Gender",
+                        "render": function (data) {
+                            return data === "M" ? "Male" : data === "F" ? "Female" : data === "P" ? "Prefer Not To Say" : data;
+                        }
+                    },
+                    { "data": "Ethnicity" },
+                    {
+                        "data": "ID", "render": function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("CreateOrUpdate","Student")/" + data + "')><i class='fa fa-pencil'></i>Edit</a> <a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i>Delete</a>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "150px"
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found please click on <b>Add New </b> Button"
+                }
+            });
+        });
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Fill Student Details',
+                        height: 500,
+                        width: 700,
+                        create: function () {
+                            var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                            closeButton.on('click', function () {
+                                Popup.dialog('close');
+                            });
+                            $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                        },
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+        function SubmitForm(form) {
+            var firstName = document.getElementById("FirstName").value;
+            var preferredName = document.getElementById("PreferredName").value;
+
+            if (!preferredName) {
+                document.getElementById("PreferredName").value = firstName;
+            }
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        function Delete(id) {
+            if (confirm('Are you sure to delete this student from the system?')) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Student")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+
+

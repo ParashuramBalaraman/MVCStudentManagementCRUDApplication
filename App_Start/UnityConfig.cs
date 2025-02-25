@@ -1,4 +1,11 @@
 using MVCStudentManagementCRUD.Services;
+using MVCStudentManagementCRUD.Services.Degrees;
+using MVCStudentManagementCRUD.Services.Departments;
+using MVCStudentManagementCRUD.Services.Ethnicities;
+using MVCStudentManagementCRUD.Services.Genders;
+using MVCStudentManagementCRUD.Services.Students;
+using MVCStudentManagementCRUD.Services.Teachers;
+using MVCStudentManagementCRUD.Services.StudentDegrees;
 using System;
 using System.Web.Mvc;
 using Unity;
@@ -47,6 +54,12 @@ namespace MVCStudentManagementCRUD
 
             // Register your service here
             container.RegisterType<IStudentService, StudentService>();
+            container.RegisterType<IDegreeService, DegreeService>();
+            container.RegisterType<IEthnicityService, EthnicityService>();
+            container.RegisterType<IGenderService, GenderService>();
+            container.RegisterType<ITeacherService, TeacherService>();
+            container.RegisterType<IDepartmentService, DepartmentService>();
+            container.RegisterType<IStudentDegreeService, StudentDegreeService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

@@ -1,0 +1,43 @@
+﻿@model MVCStudentManagementCRUD.ViewModels.Teachers.TeacherDetailsViewModel
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>More about @Model.Name</h2>
+    <a class="btn btn-outline-danger" style="margin-top:1%" onclick="SwitchView('@Url.Action("TeacherList", "Teacher")')"><i class="fa fa-mail-reply"></i> Return to Teacher List</a>
+</div>
+
+<div class="details-container">
+    <div class="details-table">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Students that are taught by this teacher</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var studentName in Model.StudentNames)
+                {
+                    <tr>
+                        <td>@studentName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .details-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .details-table {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+        .details-table:last-child {
+            margin-right: 0;
+        }
+</style>
+

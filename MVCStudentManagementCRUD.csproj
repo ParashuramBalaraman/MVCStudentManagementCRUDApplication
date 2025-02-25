@@ -1,5 +1,5 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,19 +44,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\lib\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.6.0\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -67,6 +70,24 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -74,11 +95,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>packages\Unity.Abstractions.5.11.1\lib\net47\Unity.Abstractions.dll</HintPath>
+    <Reference Include="Unity.Abstractions, Version=5.11.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>packages\Unity.Abstractions.5.11.7\lib\net48\Unity.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Container, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>packages\Unity.Container.5.11.1\lib\net47\Unity.Container.dll</HintPath>
+    <Reference Include="Unity.Container, Version=5.11.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>packages\Unity.Container.5.11.11\lib\net48\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mvc, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>packages\Unity.Mvc.5.11.1\lib\net47\Unity.Mvc.dll</HintPath>
@@ -88,29 +109,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Web.Razor">
-      <HintPath>packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages">
-      <HintPath>packages\Microsoft.AspNet.Webpages.3.2.9\lib\net45\System.Web.Webpages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Deployment">
-      <HintPath>packages\Microsoft.AspNet.Webpages.3.2.9\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Razor">
-      <HintPath>packages\Microsoft.AspNet.Webpages.3.2.9\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Helpers">
-      <HintPath>packages\Microsoft.AspNet.Webpages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc">
-      <HintPath>packages\Microsoft.AspNet.Mvc.5.2.9\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -175,12 +175,12 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Global.asax" />
-    <Content Include="Models\DBModels.Context.tt">
+    <Content Include="DAL\DBModels.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DBModels.Context.cs</LastGenOutput>
       <DependentUpon>DBModels.edmx</DependentUpon>
     </Content>
-    <Content Include="Models\DBModels.tt">
+    <Content Include="DAL\DBModels.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DBModels.edmx</DependentUpon>
       <LastGenOutput>DBModels.cs</LastGenOutput>
@@ -191,19 +191,52 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\DBModels.edmx">
+    <EntityDeploy Include="DAL\DBModels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DBModels.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\DBModels.edmx.diagram">
+    <Content Include="DAL\DBModels.edmx.diagram">
       <DependentUpon>DBModels.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Students\Views\web.config" />
     <Content Include="Areas\Students\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Students\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Students\Views\Student\Index.cshtml" />
-    <Content Include="Areas\Students\Views\Student\_CreateOrUpdate.cshtml" />
-    <Content Include="Areas\Students\Views\Student\_StudentTable.cshtml" />
+    <Content Include="Areas\Students\Views\Student\_Upsert.cshtml" />
+    <Content Include="Areas\Students\Views\Student\_StudentList.cshtml" />
+    <Content Include="Areas\Degrees\Views\web.config" />
+    <Content Include="Areas\Degrees\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Degrees\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Degrees\Views\Degree\Index.cshtml" />
+    <Content Include="Areas\Degrees\Views\Degree\_Upsert.cshtml" />
+    <Content Include="Areas\Degrees\Views\Degree\_DegreeList.cshtml" />
+    <Content Include="Areas\Ethnicities\Views\web.config" />
+    <Content Include="Areas\Genders\Views\web.config" />
+    <Content Include="Areas\Ethnicities\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Ethnicities\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Ethnicities\Views\Ethnicity\Index.cshtml" />
+    <Content Include="Areas\Ethnicities\Views\Ethnicity\_Upsert.cshtml" />
+    <Content Include="Areas\Ethnicities\Views\Ethnicity\_EthnicityList.cshtml" />
+    <Content Include="Areas\Genders\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Genders\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Genders\Views\Gender\Index.cshtml" />
+    <Content Include="Areas\Genders\Views\Gender\_Upsert.cshtml" />
+    <Content Include="Areas\Genders\Views\Gender\_GenderList.cshtml" />
+    <Content Include="Areas\Teachers\Views\web.config" />
+    <Content Include="Areas\Teachers\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Teachers\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Teachers\Views\Teacher\Index.cshtml" />
+    <Content Include="Areas\Teachers\Views\Teacher\_Upsert.cshtml" />
+    <Content Include="Areas\Teachers\Views\Teacher\_TeacherList.cshtml" />
+    <Content Include="Areas\Departments\Views\web.config" />
+    <Content Include="Areas\Departments\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Departments\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Departments\Views\Department\Index.cshtml" />
+    <Content Include="Areas\Departments\Views\Department\_Upsert.cshtml" />
+    <Content Include="Areas\Departments\Views\Department\_DepartmentList.cshtml" />
+    <Content Include="Areas\Degrees\Views\Degree\_DegreeDetails.cshtml" />
+    <Content Include="Areas\Students\Views\Student\_StudentDetails.cshtml" />
+    <Content Include="Areas\Teachers\Views\Teacher\_TeacherDetails.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
@@ -268,10 +301,10 @@
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1-14.1.js" />
     <Content Include="Scripts\jquery-ui-1.14.1.js" />
     <Content Include="Scripts\jquery-ui-1.14.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -285,39 +318,93 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Areas\Degrees\Controllers\DegreeController.cs" />
+    <Compile Include="Areas\Degrees\DegreesAreaRegistration.cs" />
+    <Compile Include="Areas\Departments\Controllers\DepartmentController.cs" />
+    <Compile Include="Areas\Departments\DepartmentsAreaRegistration.cs" />
+    <Compile Include="Areas\Ethnicities\Controllers\EthnicityController.cs" />
+    <Compile Include="Areas\Ethnicities\EthnicitiesAreaRegistration.cs" />
+    <Compile Include="Areas\Genders\Controllers\GenderController.cs" />
+    <Compile Include="Areas\Genders\GendersAreaRegistration.cs" />
     <Compile Include="Areas\Students\StudentsAreaRegistration.cs" />
     <Compile Include="Areas\Students\Controllers\StudentController.cs" />
+    <Compile Include="Areas\Teachers\Controllers\TeacherController.cs" />
+    <Compile Include="Areas\Teachers\TeachersAreaRegistration.cs" />
+    <Compile Include="DAL\Degree.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Department.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Ethnicity.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Gender.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Student.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\StudentDegree.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\sysdiagram.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Teacher.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBModels.Context.cs">
+    <Compile Include="DAL\DBModels.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModels.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBModels.cs">
+    <Compile Include="DAL\DBModels.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBModels.Designer.cs">
+    <Compile Include="DAL\DBModels.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModels.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Degree.cs">
-      <DependentUpon>DBModels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Ethnicity.cs">
-      <DependentUpon>DBModels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Student.cs">
-      <DependentUpon>DBModels.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Degrees\DegreeBO.cs" />
+    <Compile Include="Models\Departments\DepartmentBO.cs" />
+    <Compile Include="Models\Ethnicities\EthnicityBO.cs" />
+    <Compile Include="Models\Genders\GenderBO.cs" />
+    <Compile Include="Models\StudentDegrees\StudentDegreeBO.cs" />
+    <Compile Include="Models\Students\StudentBO.cs" />
+    <Compile Include="Models\Teachers\TeacherBO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\StudentService.cs" />
-    <Compile Include="Services\IStudentService.cs" />
-    <Compile Include="ViewModels\StudentViewModel.cs" />
+    <Compile Include="Services\StringService.cs" />
+    <Compile Include="Services\Degrees\DegreeService.cs" />
+    <Compile Include="Services\Degrees\Interfaces\IDegreeService.cs" />
+    <Compile Include="Services\ActionsResult.cs" />
+    <Compile Include="Services\Departments\DepartmentService.cs" />
+    <Compile Include="Services\Departments\Interfaces\IDepartmentService.cs" />
+    <Compile Include="Services\Ethnicities\EthnicityService.cs" />
+    <Compile Include="Services\Ethnicities\Interfaces\IEthnicityService.cs" />
+    <Compile Include="Services\Genders\GenderService.cs" />
+    <Compile Include="Services\Genders\Interfaces\IGenderService.cs" />
+    <Compile Include="Services\StudentDegrees\Interfaces\IStudentDegreeService.cs" />
+    <Compile Include="Services\StudentDegrees\StudentDegreeService.cs" />
+    <Compile Include="Services\Students\StudentService.cs" />
+    <Compile Include="Services\Students\Interfaces\IStudentService.cs" />
+    <Compile Include="Services\Teachers\Interfaces\ITeacherService.cs" />
+    <Compile Include="Services\Teachers\TeacherService.cs" />
+    <Compile Include="ViewModels\Degrees\DegreeDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Degrees\DegreeViewModel.cs" />
+    <Compile Include="ViewModels\Departments\DepartmentViewModel.cs" />
+    <Compile Include="ViewModels\Ethnicities\EthnicityViewModel.cs" />
+    <Compile Include="ViewModels\Genders\GenderViewModel.cs" />
+    <Compile Include="ViewModels\Students\StudentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Students\StudentViewModel.cs" />
+    <Compile Include="ViewModels\Teachers\TeacherDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Teachers\TeacherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -355,7 +442,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Degrees\Data\" />
+    <Folder Include="Areas\Departments\Data\" />
+    <Folder Include="Areas\Ethnicities\Data\" />
+    <Folder Include="Areas\Genders\Data\" />
     <Folder Include="Areas\Students\Data\" />
+    <Folder Include="Areas\Teachers\Data\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -390,8 +482,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
   </Target>
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

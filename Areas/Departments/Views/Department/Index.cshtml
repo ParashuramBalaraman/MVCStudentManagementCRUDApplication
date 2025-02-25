@@ -1,0 +1,177 @@
+﻿@model MVCStudentManagementCRUD.Models.Departments.DepartmentBO
+@{
+    ViewBag.Title = "Departments List";
+}
+
+<!-- Pill navigation -->
+<ul class="nav nav-pills" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Degree", new { area = "Degrees" })">Degrees List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Student", new { area = "Students" })">Students List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Ethnicity", new { area = "Ethnicities" })">Ethnicities List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Gender", new { area = "Genders" })">Genders List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Teacher", new { area = "Teachers" })">Teachers List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("Index", "Department", new { area = "Departments" })">Departments List</a>
+    </li>
+</ul>
+<hr />
+
+<div id="partialViewContainer">
+    @Html.Partial("_DepartmentList")
+</div>
+
+
+@section scripts{
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            InitializeDataTable();
+        });
+        function InitializeDataTable() {
+            dataTable = $("#DepartmentList").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("GetDepartments", "Department")",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "StudentCount" },
+                    { "data": "TeacherCount" },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<div class='d-flex justify-content-center align-items-center'>" +
+                                "<div class='btn-group' role='group'>" +
+                                "<a class='btn btn-warning btn-sm' onclick=SwitchView('@Url.Action("Upsert","Department")/" + data + "')><i class='fa fa-pencil'></i>Edit</a>" +
+                                "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i>Delete</a>" +
+                                "</div>" + "</div>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "150px"
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found please click on <b>Add New </b> Button"
+                }
+            });
+        }
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    if (response.success) {
+                        $.notify(response.message, {
+                            globalPosition: "top center",
+                            className: "error"
+                        });
+                    } else {
+                        formDiv.html(response);
+                        Popup = formDiv.dialog({
+                            autoOpen: true,
+                            resizable: false,
+                            title: 'Fill Department Details',
+                            height: 'auto',
+                            width: 700,
+                            create: function () {
+                                var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                                closeButton.on('click', function () {
+                                    Popup.dialog('close');
+                                });
+                                $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                            },
+                            close: function () {
+                                Popup.dialog('destroy').remove();
+                            }
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+        }
+
+        function SwitchView(url) {
+            $.get(url)
+                .done(function (response) {
+                    $('#partialViewContainer').html(response);
+                    InitializeDataTable();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + textStatus + ", " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            // Reload the partial view content
+                            $.get('@Url.Action("DepartmentList", "Department")', function (response) {
+                                $('#partialViewContainer').html(response);
+                                InitializeDataTable(); //Re-initialise table with departments
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                });
+                            });
+                        } else {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "error"
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        function Delete(id) {
+            if (confirm('Are you sure to delete this department from the system?')) {
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete","Department")/' + id,
+                success: function (data) {
+                    if (data.success) {
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        });
+                    } else {
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "error"
+                        });
+                    }
+                }
+            });
+        }
+    }
+    </script>
+}

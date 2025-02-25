@@ -1,0 +1,111 @@
+﻿@model MVCStudentManagementCRUD.Models.Teachers.TeacherBO
+@{
+    Layout = null;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Fill Teacher Details</h2>
+    <a class="btn btn-outline-danger" style="margin-top:1%" onclick="SwitchView('@Url.Action("TeacherList", "Teacher")')"><i class="fa fa-mail-reply"></i> Return to Teacher List</a>
+</div>
+
+@using (Html.BeginForm("Upsert", "Teacher", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.MiddleName, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MiddleName)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.PreferredName, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.PreferredName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PreferredName)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.DegreeId, new { @class = "control-label" })
+                    @{
+                        int degreeId = Model.DegreeId;
+                        string degreeName = ViewBag.DegreeDictionary.ContainsKey(degreeId) ? ViewBag.DegreeDictionary[degreeId] : string.Empty;
+                    }
+
+                    <input type="text" id="DegreeName" class="form-control" list="degreeOptions" value="@degreeName" />
+                    <input type="hidden" id="DegreeId" name="DegreeId" value="@Model.DegreeId" />
+                    <datalist id="degreeOptions">
+                        @foreach (var degree in (IEnumerable<SelectListItem>)ViewBag.DegreeOptions)
+                        {
+                            <option value="@degree.Text" data-id="@degree.Value"></option>
+                        }
+                    </datalist>
+                    @Html.ValidationMessageFor(model => model.DegreeId)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.DateOfBirth, new { @class = "control-label" })
+                    <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
+                    @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.GenderId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.GenderId, (IEnumerable<SelectListItem>)ViewBag.GenderOptions, "Select Gender", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.GenderId)
+                </div>
+                <div class="form-group mt-1">
+                    @Html.LabelFor(model => model.EthnicityId, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.EthnicityId, (IEnumerable<SelectListItem>)ViewBag.EthnicityOptions, "Select Ethnicity", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EthnicityId)
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-center mt-3">
+            <input type="submit" value="Save" class="btn btn-success" />
+            <input type="reset" value="Reset" class="btn btn-warning" />
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#DegreeName').on('input', function () {
+            var input = $(this).val();
+            var option = $('#degreeOptions option').filter(function () {
+                return this.value === input;
+            }).first();
+            if (option.length) {
+                var degreeId = option.data('id');
+                $('#DegreeId').val(degreeId);
+            } else {
+                $('#DegreeId').val('');
+            }
+        });
+    });
+</script>
+

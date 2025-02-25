@@ -1,15 +1,117 @@
-﻿@model MVCStudentManagementCRUD.Models.Student
+﻿@model MVCStudentManagementCRUD.Models.Students.StudentBO
 @{
     ViewBag.Title = "Student List";
 }
-@Html.Partial("_StudentTable")
+
+<!-- Pill navigation -->
+<ul class="nav nav-pills" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Degree", new { area = "Degrees" })">Degrees List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("Index", "Student", new { area = "Students" })">Students List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Ethnicity", new { area = "Ethnicities" })">Ethnicities List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Gender", new { area = "Genders" })">Genders List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Teacher", new { area = "Teachers" })">Teachers List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Department", new { area = "Departments" })">Departments List</a>
+    </li>
+</ul>
+<hr />
+
+<div id="partialViewContainer">
+    @Html.Partial("_StudentList")
+</div>
+
+
+@section styles {
+    <style>
+        .icon-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10%;
+            height: 100%;
+        }
+
+        .list-group-item {
+            padding: 0.3rem 1rem;
+            background-color: transparent !important;
+            border: none;
+        }
+
+        .list-group-item-primary {
+            background-color: transparent;
+            border-color: #b8daff;
+        }
+
+        .icon-center .tooltip {
+            background-color: #4cff00;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .tooltip .tooltip-inner {
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .tooltip .tooltip-arrow {
+            border-top-color: #333;
+        }
+    </style>
+}
+
 @section scripts{
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script>
+        //Parse through the dicts and convert them from C# to JS.
+        var degreeDictionary = {};
+        @foreach (var item in ViewBag.DegreeDictionary)
+        {
+            <text>
+                degreeDictionary["@item.Key"] = "@item.Value";
+            </text>
+        }
+
+        var genderDictionary = {};
+        @foreach (var item in ViewBag.GenderDictionary)
+        {
+            <text>
+                genderDictionary["@item.Key"] = "@item.Value";
+            </text>
+        }
+
+        var ethnicityDictionary = {};
+        @foreach (var item in ViewBag.EthnicityDictionary)
+        {
+            <text>
+                ethnicityDictionary["@item.Key"] = "@item.Value";
+            </text>
+        }
+
+
         var Popup, dataTable;
         $(document).ready(function () {
-            dataTable = $("#StudentTable").DataTable({
+            InitializeDataTable();
+        });
+        function InitializeDataTable() {
+            dataTable = $("#StudentList").DataTable({
                 "ajax": {
                     "url": "@Url.Action("GetStudents", "Student")",
                     "type": "GET",
@@ -27,20 +129,68 @@
                             return date.toLocaleDateString();
                         }
                     },
-                    { "data": "Degree" },
-                    { "data": "Email" },
-                    { "data": "Phone" },
-                    { "data": "Address" },
                     {
-                        "data": "Gender",
+                        "data": "Email",
                         "render": function (data) {
-                            return data === "M" ? "Male" : data === "F" ? "Female" : data === "P" ? "Prefer Not To Say" : data;
+                            // Using Bootstrap 4, therefore use font awesome instead of glyphicons
+                            return '<a href="#" class="icon-center" data-toggle="tooltip" data-placement="bottom" title="Click to copy email" data-email="' + data + '"> <i class="fa fa-envelope"></i> </a>';
                         }
                     },
-                    { "data": "Ethnicity" },
                     {
-                        "data": "ID", "render": function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("CreateOrUpdate","Student")/" + data + "')><i class='fa fa-pencil'></i>Edit</a> <a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i>Delete</a>";
+                        "data": "Phone",
+                        "render": function (data) {
+                            return '<a href="#" class="icon-center" data-toggle="tooltip" data-placement="bottom" title="Click to copy phone number" data-phone="' + data + '"> <i class="fa fa-phone"></i> </a>';
+                        }
+                    },
+                    { "data": "Address" },
+                    {
+                        "data": "GenderId",
+                        "render": function (data) {
+                            var icon = '';
+                            var toolTip = '';
+                            if (genderDictionary[data] == "Male") {
+                                icon = 'fa-male';
+                                toolTip = 'Male';
+                            }
+                            else if (genderDictionary[data] == "Female") {
+                                icon = 'fa-female';
+                                toolTip = 'Female';
+                            }
+                            else {
+                                icon = 'fa-minus';
+                                toolTip = 'Prefer Not To Say';
+                            }
+                            //Instead of using a button for tooltip, use an icon as this is not a copyable link.
+                            return '<i class="fa ' + icon + '" style="display: flex; justify-content: center; align-items: center; padding: 10%;"' +
+                                'data-toggle="tooltip" data-placement="top" title = "' + toolTip + '" ></i > ';
+                        }
+                    },
+                    {
+                        "data": "EthnicityId",
+                        "render": function (data) {
+                            return ethnicityDictionary[data] || data;
+                        }
+                    },
+                    {
+                        "data": "DegreeIds",
+                        "render": function (data) {
+                            var listGroup = '<ul class="list-group">';
+                            data.forEach(function (id) {
+                                var degreeName = degreeDictionary[id] || id;
+                                listGroup += '<li class="list-group-item">' + degreeName + '</li>';
+                            });
+                            listGroup += '</ul>';
+                            return listGroup;
+                            //return data.map(id => degreeDictionary[id] || id).join(", ");
+                        }
+                    },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<div class='btn-group' role='group'>" +
+                                "<a class='btn btn-warning btn-sm' onclick=SwitchView('@Url.Action("Upsert","Student")/" + data + "')><i class='fa fa-pencil'></i>Edit</a>" +
+                                "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i>Delete</a>" +
+                                "<a class='btn btn-info btn-sm' style='margin-left:5px' onclick=\"SwitchView('@Url.Action("GetStudentDetails", "Student")/" + data + "')\"><i class='fa fa-info-circle'></i>More Details</a>" +
+                                "</div>";
                         },
                         "orderable": false,
                         "searchable": false,
@@ -49,40 +199,104 @@
                 ],
                 "language": {
                     "emptyTable": "No data found please click on <b>Add New </b> Button"
+                },
+                "drawCallback": function () {
+                    // Add click event to copy email or phone number to clipboard
+                    $('.icon-center').off('click').on('click', function (e) {
+                        e.preventDefault();
+                        var email = $(this).data('email');
+                        var phone = $(this).data('phone')
+                        var tempInput = $('<input>');
+                        $('body').append(tempInput);
+                        if (email) {
+                            tempInput.val(email).select();
+                            document.execCommand('copy');
+                            $.notify("Email copied to clipboard", { globalPosition: 'top center', className: 'success' });
+                        }
+                        else if (phone) {
+                            tempInput.val(phone).select();
+                            document.execCommand('copy');
+                            $.notify("Phone number copied to clipboard", { globalPosition: 'top center', className: 'success' });
+                        }
+                        tempInput.remove();
+                    });
                 }
             });
-        });
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+        //Popup form for add and edit
+        //Currently not in use, but can be substituted with switching partial views
         function PopupForm(url) {
             var formDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
-                    formDiv.html(response);
-                    Popup = formDiv.dialog({
-                        autoOpen: true,
-                        resizable: false,
-                        title: 'Fill Student Details',
-                        height: 500,
-                        width: 700,
-                        create: function () {
-                            var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
-                            closeButton.on('click', function () {
-                                Popup.dialog('close');
-                            });
-                            $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
-                        },
-                        close: function () {
-                            Popup.dialog('destroy').remove();
-                        }
+                    if (response.success) {
+                        $.notify(response.message, {
+                            globalPosition: "top center",
+                            className: "error"
+                        });
+                    } else {
+                        formDiv.html(response);
+                        Popup = formDiv.dialog({
+                            autoOpen: true,
+                            resizable: false,
+                            title: 'Fill Student Details',
+                            height: 'auto',
+                            width: 700,
+                            create: function () {
+                                var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                                closeButton.on('click', function () {
+                                    Popup.dialog('close');
+                                });
+                                $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                            },
+                            close: function () {
+                                Popup.dialog('destroy').remove();
+                            }
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
                     });
                 });
         }
+        //Switches the partial view being displayed
+        function SwitchView(url) {
+            $.get(url)
+                .done(function (response) {
+                    $('#partialViewContainer').html(response);
+                    InitializeDataTable();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+        }
+        //Handles the form submission
         function SubmitForm(form) {
+            minDate = new Date("1970-01-01");
+            maxDate = new Date("2008-01-01");
+            var dateOfBirth = new Date(document.getElementById("DateOfBirth").value);
+            if (dateOfBirth < minDate || dateOfBirth > maxDate) {
+                alert("Date of Birth must be between 1970-01-01 and 2008-01-01");
+                return false;
+            }
+
+            //If no preferred name given, auto-fill it with first name
             var firstName = document.getElementById("FirstName").value;
             var preferredName = document.getElementById("PreferredName").value;
 
             if (!preferredName) {
                 document.getElementById("PreferredName").value = firstName;
             }
+
+
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
                 $.ajax({
@@ -91,18 +305,27 @@
                     data: $(form).serialize(),
                     success: function (data) {
                         if (data.success) {
-                            Popup.dialog('close');
-                            dataTable.ajax.reload();
+                             // Reload the partial view content
+                             $.get('@Url.Action("StudentList", "Student")', function (response) {
+                                 $('#partialViewContainer').html(response);
+                                 InitializeDataTable(); //Re-initialise table with teachers
+                                 $.notify(data.message, {
+                                     globalPosition: "top center",
+                                     className: "success"
+                                 });
+                             });
+                        } else {
                             $.notify(data.message, {
                                 globalPosition: "top center",
-                                className: "success"
-                            })
+                                className: "error"
+                            });
                         }
                     }
                 });
             }
             return false;
         }
+        //Deletes student
         function Delete(id) {
             if (confirm('Are you sure to delete this student from the system?')) {
                 $.ajax({
@@ -114,12 +337,50 @@
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
-                            })
+                            });
+                        }
+                        else {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "error"
+                            });
                         }
                     }
                 });
             }
         }
+        //Shows more student details
+        //Currently not in use, but can be substituted with switching partial views
+        function ShowDetails(studentId) {
+            var detailsDiv = $('<div/>');
+            $.get('@Url.Action("GetStudentDetails", "Student")', { id: studentId })
+                .done(function (response) {
+                    detailsDiv.html(response);
+                    detailsDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Student Details',
+                        height: 500,
+                        width: 700,
+                        create: function () {
+                            var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                            closeButton.on('click', function () {
+                                detailsDiv.dialog('close');
+                            });
+                            $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                        },
+                        close: function () {
+                            detailsDiv.dialog('destroy').remove();
+                        }
+                    });
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load details: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+            }
     </script>
 }
 

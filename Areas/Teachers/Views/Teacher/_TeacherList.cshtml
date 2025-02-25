@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MVCStudentManagementCRUD.Models.Teachers.TeacherBO>
+<h2>Teacher Record</h2>
+<a class="btn btn-primary" style="margin-bottom:10px" onclick="SwitchView('@Url.Action("Upsert", "Teacher")')"><i class="fa fa-plus"></i> Add New</a>
+<table id="TeacherList" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.MiddleName)</th>
+            <th>@Html.DisplayNameFor(model => model.PreferredName)</th>
+            <th>@Html.DisplayNameFor(model => model.DegreeId)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Phone)</th>
+            <th>@Html.DisplayNameFor(model => model.Address)</th>
+            <th>@Html.DisplayNameFor(model => model.GenderId)</th>
+            <th>@Html.DisplayNameFor(model => model.EthnicityId)</th>
+            <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>

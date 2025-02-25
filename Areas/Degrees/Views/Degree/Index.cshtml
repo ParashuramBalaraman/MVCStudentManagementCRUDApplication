@@ -1,0 +1,220 @@
+﻿@model MVCStudentManagementCRUD.Models.Degrees.DegreeBO
+@{
+    ViewBag.Title = "Degrees List";
+}
+
+<!-- Pill navigation -->
+<ul class="nav nav-pills" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("Index", "Degree", new { area = "Degrees" })">Degrees List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Student", new { area = "Students" })">Students List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Ethnicity", new { area = "Ethnicities" })">Ethnicities List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Gender", new { area = "Genders" })">Genders List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Teacher", new { area = "Teachers" })">Teachers List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index", "Department", new { area = "Departments" })">Departments List</a>
+    </li>
+</ul>
+<hr />
+
+<div id="partialViewContainer">
+    @Html.Partial("_DegreeList")
+</div>
+
+
+@section scripts{
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        var departmentDictionary = {};
+        @foreach (var item in ViewBag.DepartmentDictionary)
+        {
+            <text>
+                departmentDictionary["@item.Key"] = "@item.Value";
+            </text>
+        }
+
+        var Popup, dataTable;
+        $(document).ready(function () {
+            InitializeDataTable();
+        });
+        function InitializeDataTable() {
+            dataTable = $("#DegreeList").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("GetDegrees", "Degree")",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Name" },
+                    {
+                        "data": "DepartmentId",
+                        "render": function (data) {
+                            return departmentDictionary[data] || data;
+                        }
+                    },
+                    {
+                        "data": "Id", "render": function (data) {
+                            return "<div class='btn-group' role='group'>" +
+                                "<a class='btn btn-warning btn-sm' onclick=SwitchView('@Url.Action("Upsert","Degree")/" + data + "')><i class='fa fa-pencil'></i>Edit</a>" +
+                                "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i>Delete</a>" +
+                                "<a class='btn btn-info btn-sm' style='margin-left:5px' onclick=\"SwitchView('@Url.Action("GetDegreeDetails", "Degree")/" + data + "')\"><i class='fa fa-info-circle'></i>More Details</a>" +
+                                "</div>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "150px"
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found please click on <b>Add New </b> Button"
+                }
+            });
+        }
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    if (response.success) {
+                        $.notify(response.message, {
+                            globalPosition: "top center",
+                            className: "error"
+                        });
+                    } else {
+                        formDiv.html(response);
+                        Popup = formDiv.dialog({
+                            autoOpen: true,
+                            resizable: false,
+                            title: 'Fill Degree Details',
+                            height: 'auto',
+                            width: 700,
+                            create: function () {
+                                var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                                closeButton.on('click', function () {
+                                    Popup.dialog('close');
+                                });
+                                $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                            },
+                            close: function () {
+                                Popup.dialog('destroy').remove();
+                            }
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+        }
+
+        function SwitchView(url) {
+            $.get(url)
+                .done(function (response) {
+                    $('#partialViewContainer').html(response);
+                    InitializeDataTable();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Failed to load form: " + errorThrown, {
+                        globalPosition: "top center",
+                        className: "error"
+                    });
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            // Reload the partial view content
+                            $.get('@Url.Action("DegreeList", "Degree")', function (response) {
+                                $('#partialViewContainer').html(response);
+                                InitializeDataTable(); //Re-initialise table with degrees
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                });
+                            });
+                        } else {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "error"
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        function Delete(id) {
+            if (confirm('Are you sure to delete this degree from the system?')) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Degree")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            });
+                        } else {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "error"
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        function ShowDetails(degreeId) {
+        var detailsDiv = $('<div/>');
+        $.get('@Url.Action("GetDegreeDetails", "Degree")', { id: degreeId })
+            .done(function (response) {
+                detailsDiv.html(response);
+                detailsDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Degree Details',
+                    height: 500,
+                    width: 700,
+                    create: function () {
+                        var closeButton = $('<button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span></button>');
+                        closeButton.on('click', function () {
+                            detailsDiv.dialog('close');
+                        });
+                        $(this).closest('.ui-dialog').find('.ui-dialog-titlebar').append(closeButton);
+                    },
+                    close: function () {
+                        detailsDiv.dialog('destroy').remove();
+                    }
+                });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                $.notify("Failed to load details: " + errorThrown, {
+                    globalPosition: "top center",
+                    className: "error"
+                });
+            });
+        }
+    </script>
+}
+

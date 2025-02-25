@@ -1,0 +1,14 @@
+﻿@model IEnumerable<MVCStudentManagementCRUD.Models.Departments.DepartmentBO>
+
+<h2>Department Record</h2>
+<a class="btn btn-primary" style="margin-bottom:10px" onclick="SwitchView('@Url.Action("Upsert", "Department")')"><i class="fa fa-plus"></i> Add New</a>
+<table id="DepartmentList" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.StudentCount)</th>
+            <th>@Html.DisplayNameFor(model => model.TeacherCount)</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>

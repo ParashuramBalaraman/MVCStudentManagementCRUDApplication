@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a5dee8e99215442faa7b951ded10e314" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Degree" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Department" Width="1.5" PointX="1.5" PointY="1.125" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Ethnicity" Width="1.5" PointX="0.75" PointY="5.25" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Gender" Width="1.5" PointX="3.75" PointY="9.625" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Student" Width="1.5" PointX="6" PointY="4.25" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.sysdiagram" Width="1.5" PointX="5.75" PointY="1.375" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.Teacher" Width="1.5" PointX="3" PointY="4.125" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Degree_Department" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Teacher_Degree" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Students_Ethnicity" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Teacher_Ethnicity" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Students_Gender" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_Teacher_Gender" />
+        <EntityTypeShape EntityType="SchoolDatabaseModel.StudentDegree" Width="1.5" PointX="8.25" PointY="3.375" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_StudentDegree_Degree" />
+        <AssociationConnector Association="SchoolDatabaseModel.FK_StudentDegree_Students" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
